@@ -14,6 +14,11 @@ local Utils = require("avante.utils")
 ---@field public cwd                string
 ---@field public selected_filepaths string[]
 
+---@class ModelSelectorOverrideItem
+---@field name string | fun(): string
+---@field provider_name string | fun(): string
+---@field model string | fun(): string
+
 ---@class avante.CoreConfig: avante.Config
 local M = {}
 ---@class avante.Config
@@ -47,6 +52,8 @@ M._defaults = {
     endpoint = "https://api.openai.com/v1", -- The API endpoint for RAG service
     docker_extra_args = "", -- Extra arguments to pass to the docker command
   },
+  ---@type ModelSelectorOverrideItem[] | (fun(): ModelSelectorOverrideItem[]) | nil
+  model_selector_override = nil,
   web_search_engine = {
     provider = "tavily",
     proxy = nil,

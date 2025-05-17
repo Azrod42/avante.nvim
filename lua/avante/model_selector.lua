@@ -20,13 +20,20 @@ end
 function M.open()
   local models = {}
 
-  -- Collect models from main providers and vendors
-  for _, provider_name in ipairs(Config.provider_names) do
-    local cfg = Config.get_provider_config(provider_name)
-    if cfg.hide_in_model_selector then goto continue end
-    local entry = create_model_entry(provider_name, cfg)
-    if entry then table.insert(models, entry) end
-    ::continue::
+  if Config.model_override then
+    -- Override models with custom ones
+    for _, model in ipairs(Config.model_override) do
+      table.insert(models, model)
+    end
+  else
+    -- Collect models from main providers and vendors
+    for _, provider_name in ipairs(Config.provider_names) do
+      local cfg = Config.get_provider_config(provider_name)
+      if cfg.hide_in_model_selector then goto continue end
+      local entry = create_model_entry(provider_name, cfg)
+      if entry then table.insert(models, entry) end
+      ::continue::
+    end
   end
 
   if #models == 0 then
